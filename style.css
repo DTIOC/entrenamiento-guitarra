@@ -155,7 +155,7 @@ header p {
     margin-bottom: 10px;
 }
 
-/* ===== DIAGRAMA DE GUITARRA COMPLETO ===== */
+/* ===== DIAGRAMA DE GUITARRA: CABEZAL A LA DERECHA ===== */
 .guitar-diagram {
     background: rgba(255, 255, 255, 0.1);
     padding: 25px;
@@ -169,40 +169,7 @@ header p {
     gap: 8px;
 }
 
-/* Cabeza de la guitarra con forma curva */
-.guitar-head {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-}
-
-.head-shape {
-    position: relative;
-    width: 35px;
-    height: 100%;
-    background: linear-gradient(to right, #654321, #8B4513);
-    border-radius: 20px 0 0 20px;
-    border: 3px solid #4a2f1a;
-    border-right: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 8px 5px;
-    box-shadow: -3px 0 8px rgba(0, 0, 0, 0.4);
-}
-
-/* Clavijas (tuning pegs) */
-.tuning-peg {
-    width: 18px;
-    height: 18px;
-    background: radial-gradient(circle, #C0C0C0 30%, #808080 100%);
-    border: 2px solid #555;
-    border-radius: 50%;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    align-self: flex-end;
-}
-
-/* Etiquetas de cuerdas */
+/* Etiquetas de cuerdas (a la izquierda) */
 .string-labels {
     display: flex;
     flex-direction: column;
@@ -235,8 +202,8 @@ header p {
     height: 350px;
     background: linear-gradient(to bottom, #8B4513 0%, #654321 100%);
     border: 4px solid #333;
-    border-left: 8px solid #2a1a0a;
-    border-radius: 0 8px 8px 0;
+    border-right: 8px solid #2a1a0a; /* Cejuela a la DERECHA */
+    border-radius: 8px 0 0 8px;
     overflow: visible;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
@@ -307,25 +274,56 @@ header p {
     box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
 }
 
-/* Números romanos de trastes */
+/* Números romanos alineados con cada traste */
 .fret-numbers {
-    display: flex;
-    justify-content: space-between;
+    position: relative;
+    height: 30px;
     margin-top: 12px;
-    padding: 0 10px;
 }
 
 .fret-number {
+    position: absolute;
     font-weight: bold;
     font-size: 1.2rem;
     color: #C0C0C0;
-    text-align: center;
-    flex: 1;
+    transform: translateX(-50%); /* Centrar el número sobre la barra */
 }
 
-.fret-number.open {
+.fret-number:first-child {
     color: #e94560;
     font-size: 1rem;
+}
+
+/* Cabeza de la guitarra (a la DERECHA) */
+.guitar-head {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.head-shape {
+    position: relative;
+    width: 35px;
+    height: 100%;
+    background: linear-gradient(to left, #654321, #8B4513);
+    border-radius: 0 20px 20px 0;
+    border: 3px solid #4a2f1a;
+    border-left: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px 5px;
+    box-shadow: 3px 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.tuning-peg {
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle, #C0C0C0 30%, #808080 100%);
+    border: 2px solid #555;
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    align-self: flex-start; /* Clavijas hacia la izquierda (hacia el diapasón) */
 }
 
 .instructions {
