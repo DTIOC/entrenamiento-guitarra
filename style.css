@@ -182,10 +182,10 @@ header p {
     margin-bottom: 10px;
 }
 
-/* DIAGRAMA DE GUITARRA */
+/* DIAGRAMA DE GUITARRA - ACTUALIZADO */
 .guitar-diagram {
     background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
+    padding: 30px;
     border-radius: 15px;
     margin-bottom: 20px;
 }
@@ -193,27 +193,30 @@ header p {
 .string-labels {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    color: #e94560;
 }
 
 .fretboard {
     position: relative;
     width: 100%;
-    height: 300px;
+    height: 350px; /* Aumentado de 300px */
     background: linear-gradient(to bottom, #8B4513 0%, #654321 100%);
-    border: 3px solid #333;
-    border-radius: 5px;
-    overflow: hidden;
+    border: 4px solid #333;
+    border-radius: 8px;
+    overflow: visible; /* Cambiado para que se vean los círculos completos */
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .fret {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 2px;
-    background: #C0C0C0;
+    width: 3px; /* Aumentado de 2px */
+    background: linear-gradient(to bottom, #C0C0C0, #808080, #C0C0C0);
+    box-shadow: 1px 0 2px rgba(0, 0, 0, 0.3);
 }
 
 .string {
@@ -221,56 +224,64 @@ header p {
     left: 0;
     right: 0;
     height: 2px;
-    background: #333;
+    background: linear-gradient(to right, #444, #222, #444);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
 }
 
 .string:nth-child(odd) {
-    height: 3px;
+    height: 4px; /* Aumentado de 3px para cuerdas graves */
 }
 
 .fret-point {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 40px; /* Aumentado de 30px */
+    height: 40px; /* Aumentado de 30px */
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.25);
+    border: 3px solid rgba(255, 255, 255, 0.6); /* Borde más grueso */
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 1rem; /* Aumentado */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 10; /* Asegura que estén encima */
 }
 
 .fret-point:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.15);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .fret-point.active {
     background: #e94560;
     border-color: #fff;
     color: #fff;
+    box-shadow: 0 0 15px rgba(233, 69, 96, 0.6);
 }
 
 .fret-point.correct {
     background: #00d9a5;
     border-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 217, 165, 0.6);
 }
 
 .fret-point.incorrect {
     background: #ff4444;
     border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
 }
 
 .fret-numbers {
     display: flex;
     justify-content: space-around;
-    margin-top: 10px;
+    margin-top: 15px;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    color: #C0C0C0;
 }
 
 .instructions {
@@ -284,13 +295,13 @@ header p {
 /* Responsive */
 @media (max-width: 600px) {
     .fretboard {
-        height: 250px;
+        height: 300px;
     }
     
     .fret-point {
-        width: 25px;
-        height: 25px;
-        font-size: 0.8rem;
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
     }
     
     header h1 {
