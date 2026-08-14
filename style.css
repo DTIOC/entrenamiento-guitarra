@@ -120,6 +120,8 @@ header p {
 .btn-success { background: #00d9a5; color: #1a1a2e; }
 .btn-success:hover { background: #00f5b8; }
 .btn-warning { background: #ffc107; color: #1a1a2e; }
+.btn-info { background: #9b59b6; color: white; }
+.btn-info:hover { background: #8e44ad; }
 .btn-warning:hover { background: #ffdb4d; }
 
 .info-panel {
