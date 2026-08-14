@@ -68,21 +68,29 @@ class GuitarTrainingApp {
     createFretboard() {
         this.fretboard.innerHTML = '';
         
+        const totalHeight = 350; // Altura del diapasón
+        const stringSpacing = totalHeight / 6; // Espacio entre cuerdas
+        const pointSize = 38; // Tamaño del círculo
+        
         // 1. DIBUJAR TRASTES (barras metálicas)
-        // Traste 0 = cejuela (derecha), trastes 1-4 hacia la izquierda
-        for (let i = 0; i <= 4; i++) {
+        // La cejuela (traste 0) está a la derecha (100%).
+        // Los trastes I, II, III, IV van hacia la izquierda.
+        for (let i = 1; i <= 4; i++) {
             const fret = document.createElement('div');
             fret.className = 'fret';
-            fret.style.left = `${(i / 4) * 100}%`;
+            // i=1 (I) -> 75%, i=2 (II) -> 50%, i=3 (III) -> 25%, i=4 (IV) -> 0%
+            fret.style.left = `${((4 - i) / 4) * 100}%`;
             this.fretboard.appendChild(fret);
         }
         
         // 2. DIBUJAR CUERDAS Y PUNTOS (De la 6ª arriba a la 1ª abajo)
-        let visualIndex = 0;
         for (let string = 6; string >= 1; string--) {
+            const stringIndex = 6 - string; // 0, 1, 2, 3, 4, 5
+            const stringTop = (stringIndex * stringSpacing) + (stringSpacing / 2);
+            
             const stringLine = document.createElement('div');
             stringLine.className = 'string';
-            stringLine.style.top = `${(visualIndex / 5) * 100}%`;
+            stringLine.style.top = `${stringTop}px`;
             this.fretboard.appendChild(stringLine);
             
             // Puntos en cada traste (0, 1, 2, 3, 4)
@@ -92,15 +100,16 @@ class GuitarTrainingApp {
                 point.dataset.string = string;
                 point.dataset.fret = fret;
                 
-                // Posición horizontal: alineada con cada traste
-                const leftPercent = (fret / 4) * 100;
-                point.style.left = `calc(${leftPercent}% - 19px)`;
-                point.style.top = `calc(${(visualIndex / 5) * 100}% - 19px)`;
+                // LÓGICA INVERTIDA: 
+                // Fret 0 (al aire) -> 100% (derecha)
+                // Fret 4 -> 0% (izquierda)
+                const leftPercent = ((4 - fret) / 4) * 100;
+                point.style.left = `calc(${leftPercent}% - ${pointSize / 2}px)`;
+                point.style.top = `${stringTop - (pointSize / 2)}px`;
                 
                 point.addEventListener('click', () => this.handleFretClick(string, fret, point));
                 this.fretboard.appendChild(point);
             }
-            visualIndex++;
         }
     }
     
@@ -231,7 +240,7 @@ class GuitarTrainingApp {
         const group = document.getElementById('studentGroup').value.trim();
         
         if (!email || !name || !group) {
-            alert('⚠️ Por favor, completa todos los campos de registro antes de verificar.');
+            alert('️ Por favor, completa todos los campos de registro antes de verificar.');
             document.getElementById('studentEmail').focus();
             return;
         }
@@ -274,9 +283,9 @@ class GuitarTrainingApp {
         scoreDisplay.style.display = 'block';
         document.getElementById('scoreValue').textContent = score.percentage;
         
-        let text = '📚 Sigue practicando, ¡tú puedes!';
-        if (score.percentage === 100) text = ' ¡Perfecto! ¡Excelente posición!';
-        else if (score.percentage >= 80) text = '👏 ¡Muy bien! Casi perfecto';
+        let text = ' Sigue practicando, ¡tú puedes!';
+        if (score.percentage === 100) text = '🌟 ¡Perfecto! ¡Excelente posición!';
+        else if (score.percentage >= 80) text = ' ¡Muy bien! Casi perfecto';
         else if (score.percentage >= 60) text = '👍 Bien, sigue practicando';
         else if (score.percentage >= 40) text = '💪 Vas por buen camino, continúa';
         document.getElementById('feedbackText').textContent = text;
