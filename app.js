@@ -1,28 +1,22 @@
-// Guitar Training App - Notes and Chords
-// Using Tone.js for audio synthesis con sonido de guitarra
-
 class GuitarTrainingApp {
     constructor() {
         this.synth = null;
-        this.currentMode = 'notes'; // 'notes' o 'chords'
+        this.currentMode = 'notes';
         this.currentExercise = null;
         this.userPositions = [];
         this.fretboard = document.getElementById('fretboard');
-        
-        // Google Apps Script Webhook URL
         this.webhookURL = 'https://script.google.com/macros/s/AKfycbz4dyyFtNkyHYmkSokJDSx5pmucX2sGqaiRTZxEN4BUzOebSJUDYFVK66DxypNq81Ap/exec';
         
-        // Base de datos de notas en cada cuerda y traste
+        // BASE DE DATOS: 5 notas por cuerda (trastes 0, 1, 2, 3, 4)
         this.noteDatabase = {
-            6: ['Mi2', 'Fa2', 'Fa#2', 'Sol2'],
-            5: ['La2', 'La#2', 'Si2', 'Do3'],
-            4: ['Re3', 'Re#3', 'Mi3', 'Fa3'],
-            3: ['Sol3', 'Sol#3', 'La3', 'La#3'],
-            2: ['Si3', 'Do4', 'Do#4', 'Re4'],
-            1: ['Mi4', 'Fa4', 'Fa#4', 'Sol4']
+            6: ['Mi2', 'Fa2', 'Fa#2', 'Sol2', 'Sol#2'],
+            5: ['La2', 'La#2', 'Si2', 'Do3', 'Do#3'],
+            4: ['Re3', 'Re#3', 'Mi3', 'Fa3', 'Fa#3'],
+            3: ['Sol3', 'Sol#3', 'La3', 'La#3', 'Si3'],
+            2: ['Si3', 'Do4', 'Do#4', 'Re4', 'Re#4'],
+            1: ['Mi4', 'Fa4', 'Fa#4', 'Sol4', 'Sol#4']
         };
         
-        // Base de datos de acordes (cuerda: traste, 0=al aire, -1=no tocar)
         this.chordDatabase = {
             'Em': {6: 0, 5: 2, 4: 2, 3: 0, 2: 0, 1: 0},
             'E': {6: 0, 5: 2, 4: 2, 3: 1, 2: 0, 1: 0},
@@ -58,29 +52,14 @@ class GuitarTrainingApp {
     async initAudio() {
         if (!this.synth) {
             await Tone.start();
-            // SONIDO MÁS REALISTA DE GUITARRA
             this.synth = new Tone.PolySynth(Tone.Synth, {
-                oscillator: {
-                    type: "sawtooth", // Diente de sierra para más armónicos (como cuerda)
-                    harmonicity: 1.2
-                },
-                envelope: {
-                    attack: 0.01,      // Ataque rápido como púa
-                    decay: 0.4,        // Decaimiento natural
-                    sustain: 0.3,      // Sustain moderado
-                    release: 1.5       // Release largo como cuerda vibrando
-                },
+                oscillator: { type: "sawtooth", harmonicity: 1.2 },
+                envelope: { attack: 0.01, decay: 0.4, sustain: 0.3, release: 1.5 },
                 volume: -5
             }).toDestination();
             
-            // Agregar efectos para sonar más como guitarra
-            const distortion = new Tone.Distortion(0.1).toDestination();
             const filter = new Tone.Filter(3000, "lowpass").toDestination();
-            const reverb = new Tone.Reverb({
-                decay: 2.5,
-                wet: 0.25
-            }).toDestination();
-            
+            const reverb = new Tone.Reverb({ decay: 2.5, wet: 0.25 }).toDestination();
             this.synth.connect(filter);
             filter.connect(reverb);
         }
@@ -89,33 +68,40 @@ class GuitarTrainingApp {
     createFretboard() {
         this.fretboard.innerHTML = '';
         
-        // Crear trastes (líneas verticales)
-        for (let i = 0; i <= 3; i++) {
+        // 1. DIBUJAR TRASTES (barras metálicas en posiciones 0, 1, 2, 3, 4)
+        // El traste 0 es la cejuela (borde izquierdo), los demás se distribuyen
+        for (let i = 1; i <= 4; i++) {
             const fret = document.createElement('div');
             fret.className = 'fret';
-            fret.style.left = `${(i / 3) * 100}%`;
+            fret.style.left = `${(i / 4) * 100}%`;
             this.fretboard.appendChild(fret);
         }
         
-        // Crear cuerdas (líneas horizontales) y puntos interactivos
-        for (let string = 1; string <= 6; string++) {
+        // 2. DIBUJAR CUERDAS Y PUNTOS (De la 6ª arriba a la 1ª abajo)
+        let visualIndex = 0;
+        for (let string = 6; string >= 1; string--) {
             const stringLine = document.createElement('div');
             stringLine.className = 'string';
-            stringLine.style.top = `${((string - 1) / 5) * 100}%`;
+            stringLine.style.top = `${(visualIndex / 5) * 100}%`;
             this.fretboard.appendChild(stringLine);
             
-            // Crear puntos para cada traste
-            for (let fret = 0; fret <= 3; fret++) {
+            // Puntos en cada traste (0, 1, 2, 3, 4)
+            for (let fret = 0; fret <= 4; fret++) {
                 const point = document.createElement('div');
                 point.className = 'fret-point';
                 point.dataset.string = string;
                 point.dataset.fret = fret;
-                point.style.left = `calc(${(fret / 3) * 100}% - 20px)`; // Ajustado para círculo más grande
-                point.style.top = `calc(${((string - 1) / 5) * 100}% - 20px)`; // Ajustado
+                
+                // Posición horizontal: centrada entre trastes
+                // Traste 0 = al inicio, traste 1 = 25%, traste 2 = 50%, etc.
+                const leftPercent = (fret / 4) * 100;
+                point.style.left = `calc(${leftPercent}% - 19px)`;
+                point.style.top = `calc(${(visualIndex / 5) * 100}% - 19px)`;
                 
                 point.addEventListener('click', () => this.handleFretClick(string, fret, point));
                 this.fretboard.appendChild(point);
             }
+            visualIndex++;
         }
     }
     
@@ -140,7 +126,6 @@ class GuitarTrainingApp {
         this.clearPositions();
         
         if (this.currentMode === 'notes') {
-            // Seleccionar nota aleatoria
             const strings = Object.keys(this.noteDatabase);
             const randomString = strings[Math.floor(Math.random() * strings.length)];
             const notes = this.noteDatabase[randomString];
@@ -157,7 +142,6 @@ class GuitarTrainingApp {
             document.getElementById('positionInfo').textContent = `${this.currentExercise.note} (Cuerda ${this.currentExercise.string}, Traste ${this.currentExercise.fret})`;
             document.getElementById('instructionText').textContent = 'Haz clic en el punto correcto para pisar la nota';
         } else {
-            // Seleccionar acorde aleatorio
             const chords = Object.keys(this.chordDatabase);
             const randomChord = chords[Math.floor(Math.random() * chords.length)];
             
@@ -179,15 +163,12 @@ class GuitarTrainingApp {
     handleFretClick(string, fret, pointElement) {
         this.initAudio();
         
-        // Toggle activar/desactivar punto
         if (pointElement.classList.contains('active')) {
             pointElement.classList.remove('active');
             this.userPositions = this.userPositions.filter(p => !(p.string === string && p.fret === fret));
         } else {
             pointElement.classList.add('active');
             this.userPositions.push({string, fret});
-            
-            // Reproducir nota
             if (this.currentMode === 'notes') {
                 const note = this.noteDatabase[string][fret];
                 this.playNote(note);
@@ -197,23 +178,20 @@ class GuitarTrainingApp {
     
     async playNote(noteName) {
         await this.initAudio();
-        // Mapear nombre de nota a frecuencia de Tone.js
         const noteMap = {
-            'Mi2': 'E2', 'Fa2': 'F2', 'Fa#2': 'F#2', 'Sol2': 'G2',
-            'La2': 'A2', 'La#2': 'A#2', 'Si2': 'B2', 'Do3': 'C3',
-            'Re3': 'D3', 'Re#3': 'D#3', 'Mi3': 'E3', 'Fa3': 'F3',
-            'Sol3': 'G3', 'Sol#3': 'G#3', 'La3': 'A3', 'La#3': 'A#3',
-            'Si3': 'B3', 'Do4': 'C4', 'Do#4': 'C#4', 'Re4': 'D4',
-            'Mi4': 'E4', 'Fa4': 'F4', 'Fa#4': 'F#4', 'Sol4': 'G4'
+            'Mi2': 'E2', 'Fa2': 'F2', 'Fa#2': 'F#2', 'Sol2': 'G2', 'Sol#2': 'G#2',
+            'La2': 'A2', 'La#2': 'A#2', 'Si2': 'B2', 'Do3': 'C3', 'Do#3': 'C#3',
+            'Re3': 'D3', 'Re#3': 'D#3', 'Mi3': 'E3', 'Fa3': 'F3', 'Fa#3': 'F#3',
+            'Sol3': 'G3', 'Sol#3': 'G#3', 'La3': 'A3', 'La#3': 'A#3', 'Si3': 'B3',
+            'Do4': 'C4', 'Do#4': 'C#4', 'Re4': 'D4', 'Re#4': 'D#4',
+            'Mi4': 'E4', 'Fa4': 'F4', 'Fa#4': 'F#4', 'Sol4': 'G4', 'Sol#4': 'G#4'
         };
-        
         const toneNote = noteMap[noteName] || noteName;
         this.synth.triggerAttackRelease(toneNote, '8n');
     }
     
     async playExercise() {
         await this.initAudio();
-        
         const feedback = document.getElementById('feedback');
         feedback.textContent = '🎵 Escuchando...';
         feedback.style.color = '#00d9a5';
@@ -225,23 +203,16 @@ class GuitarTrainingApp {
                 feedback.style.color = '#fff';
             }, 1000);
         } else {
-            // Reproducir acorde (todas las notas simultáneamente)
             const positions = this.currentExercise.positions;
             const notesToPlay = [];
-            
             for (let string = 1; string <= 6; string++) {
                 const fret = positions[string];
-                if (fret >= 0) {
+                if (fret >= 0 && fret <= 4) {
                     const note = this.noteDatabase[string][fret];
-                    notesToPlay.push(note);
+                    if(note) notesToPlay.push(note);
                 }
             }
-            
-            // Reproducir con un pequeño arpegio para sonar más natural
-            notesToPlay.forEach((note, index) => {
-                setTimeout(() => this.playNote(note), index * 50);
-            });
-            
+            notesToPlay.forEach((note, index) => setTimeout(() => this.playNote(note), index * 50));
             setTimeout(() => {
                 feedback.textContent = '✅ Ahora forma el acorde en el diagrama';
                 feedback.style.color = '#fff';
@@ -251,34 +222,28 @@ class GuitarTrainingApp {
     
     clearPositions() {
         this.userPositions = [];
-        document.querySelectorAll('.fret-point').forEach(point => {
-            point.classList.remove('active', 'correct', 'incorrect');
-        });
+        document.querySelectorAll('.fret-point').forEach(point => point.classList.remove('active', 'correct', 'incorrect'));
         document.getElementById('scoreDisplay').style.display = 'none';
     }
     
     checkExercise() {
-        // Validar datos del estudiante
         const email = document.getElementById('studentEmail').value.trim();
         const name = document.getElementById('studentName').value.trim();
         const group = document.getElementById('studentGroup').value.trim();
         
         if (!email || !name || !group) {
-            alert('️ Por favor, completa todos los campos de registro antes de verificar.');
+            alert('⚠️ Por favor, completa todos los campos de registro antes de verificar.');
             document.getElementById('studentEmail').focus();
             return;
         }
-        
         if (this.userPositions.length === 0) {
-            document.getElementById('feedback').textContent = '⚠️ Primero coloca los dedos en el diagrama';
+            document.getElementById('feedback').textContent = '️ Primero coloca los dedos en el diagrama';
             return;
         }
         
         const score = this.calculateScore();
         this.showResults(score);
         this.highlightPositions();
-        
-        // Guardado automático
         this.saveToGoogleSheets();
     }
     
@@ -288,55 +253,40 @@ class GuitarTrainingApp {
         
         if (this.currentExercise.type === 'note') {
             total = 1;
-            const correctPos = {string: this.currentExercise.string, fret: this.currentExercise.fret};
-            const userPos = this.userPositions.find(p => p.string === correctPos.string && p.fret === correctPos.fret);
+            const userPos = this.userPositions.find(p => p.string === this.currentExercise.string && p.fret === this.currentExercise.fret);
             if (userPos) correct = 1;
         } else {
             const positions = this.currentExercise.positions;
             const correctPositions = [];
-            
             for (let string = 1; string <= 6; string++) {
                 const fret = positions[string];
-                if (fret >= 0) {
-                    correctPositions.push({string, fret});
-                    total++;
-                }
+                if (fret >= 0) { correctPositions.push({string, fret}); total++; }
             }
-            
             this.userPositions.forEach(userPos => {
-                const isCorrect = correctPositions.some(cp => cp.string === userPos.string && cp.fret === userPos.fret);
-                if (isCorrect) correct++;
+                if (correctPositions.some(cp => cp.string === userPos.string && cp.fret === userPos.fret)) correct++;
             });
         }
-        
         const percentage = Math.round((correct / total) * 100);
         return { percentage, correct, total };
     }
     
     showResults(score) {
         const scoreDisplay = document.getElementById('scoreDisplay');
-        const scoreValue = document.getElementById('scoreValue');
-        const feedbackText = document.getElementById('feedbackText');
-        
         scoreDisplay.style.display = 'block';
-        scoreValue.textContent = score.percentage;
+        document.getElementById('scoreValue').textContent = score.percentage;
         
-        if (score.percentage === 100) feedbackText.textContent = '🌟 ¡Perfecto! ¡Excelente posición!';
-        else if (score.percentage >= 80) feedbackText.textContent = '👏 ¡Muy bien! Casi perfecto';
-        else if (score.percentage >= 60) feedbackText.textContent = ' Bien, sigue practicando';
-        else if (score.percentage >= 40) feedbackText.textContent = '💪 Vas por buen camino, continúa';
-        else feedbackText.textContent = ' Sigue practicando, ¡tú puedes!';
+        let text = '📚 Sigue practicando, ¡tú puedes!';
+        if (score.percentage === 100) text = '🌟 ¡Perfecto! ¡Excelente posición!';
+        else if (score.percentage >= 80) text = ' ¡Muy bien! Casi perfecto';
+        else if (score.percentage >= 60) text = '👍 Bien, sigue practicando';
+        else if (score.percentage >= 40) text = '💪 Vas por buen camino, continúa';
+        document.getElementById('feedbackText').textContent = text;
         
-        document.getElementById('feedback').innerHTML = `
-            Posiciones correctas: ${score.correct}/${score.total}<br>
-            <small>Calificación: ${score.percentage}%</small>
-        `;
+        document.getElementById('feedback').innerHTML = `Posiciones correctas: ${score.correct}/${score.total}<br><small>Calificación: ${score.percentage}%</small>`;
     }
     
     highlightPositions() {
-        document.querySelectorAll('.fret-point').forEach(point => {
-            point.classList.remove('correct', 'incorrect');
-        });
+        document.querySelectorAll('.fret-point').forEach(point => point.classList.remove('correct', 'incorrect'));
         
         if (this.currentExercise.type === 'note') {
             const correctPoint = document.querySelector(`[data-string="${this.currentExercise.string}"][data-fret="${this.currentExercise.fret}"]`);
@@ -351,12 +301,9 @@ class GuitarTrainingApp {
                 }
             }
         }
-        
         this.userPositions.forEach(pos => {
             const point = document.querySelector(`[data-string="${pos.string}"][data-fret="${pos.fret}"]`);
-            if (point && !point.classList.contains('correct')) {
-                point.classList.add('incorrect');
-            }
+            if (point && !point.classList.contains('correct')) point.classList.add('incorrect');
         });
     }
     
@@ -364,18 +311,12 @@ class GuitarTrainingApp {
         const email = document.getElementById('studentEmail').value.trim();
         const name = document.getElementById('studentName').value.trim();
         const group = document.getElementById('studentGroup').value.trim();
-        
-        if (!this.webhookURL) {
-            console.error('Webhook no configurado');
-            return;
-        }
+        if (!this.webhookURL) return;
         
         const score = this.calculateScore();
         const data = {
             timestamp: new Date().toISOString(),
-            email: email || 'No especificado',
-            name: name || 'No especificado',
-            group: group || 'No especificado',
+            email, name, group,
             exerciseType: this.currentExercise.type,
             exerciseDetail: this.currentExercise.type === 'note' ? this.currentExercise.note : this.currentExercise.chord,
             score: score.percentage,
@@ -385,19 +326,10 @@ class GuitarTrainingApp {
         };
         
         try {
-            await fetch(this.webhookURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            console.log('✅ Resultado guardado automáticamente');
-        } catch (error) {
-            console.error('Error al guardar:', error);
-        }
+            await fetch(this.webhookURL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            console.log('✅ Guardado');
+        } catch (error) { console.error('Error:', error); }
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    window.app = new GuitarTrainingApp();
-});
+document.addEventListener('DOMContentLoaded', () => { window.app = new GuitarTrainingApp(); });
