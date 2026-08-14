@@ -7,7 +7,7 @@
     <title>Entrenamiento de Guitarra - Notas y Acordes</title>
     
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=14">
     <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.min.js"></script>
 </head>
 <body>
@@ -31,12 +31,13 @@
         </div>
 
         <div class="game-area">
-            <div class="controls">
-                <button id="btnPlay" class="btn btn-primary">▶️ Escuchar</button>
-                <button id="btnGenerate" class="btn btn-secondary">🎲 Nuevo Ejercicio</button>
-                <button id="btnCheck" class="btn btn-success">✓ Verificar</button>
-                <button id="btnClear" class="btn btn-warning">🔄 Limpiar</button>
-            </div>
+           <div class="controls">
+    <button id="btnPlay" class="btn btn-primary">▶️ Escuchar</button>
+    <button id="btnGenerate" class="btn btn-secondary">🎲 Nuevo Ejercicio</button>
+    <button id="btnCheck" class="btn btn-success">✓ Verificar</button>
+    <button id="btnPlayUser" class="btn btn-info">🎵 Tocar mi acorde</button>
+    <button id="btnClear" class="btn btn-warning">🔄 Limpiar</button>
+</div>
 
             <div class="info-panel">
                 <div class="exercise-info">
@@ -106,7 +107,7 @@
         </div>
     </div>
 
-    <script src="app.js?v=13"></script>
+    <script src="app.js?v=14"></script>
     
     <script>
         if ('serviceWorker' in navigator) {
