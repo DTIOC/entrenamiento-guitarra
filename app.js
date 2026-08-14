@@ -4,7 +4,6 @@ class GuitarTrainingApp {
         this.currentMode = 'notes';
         this.currentExercise = null;
         this.userPositions = [];
-        this.fretboard = document.getElementById('fretboard');
         this.webhookURL = 'https://script.google.com/macros/s/AKfycbz4dyyFtNkyHYmkSokJDSx5pmucX2sGqaiRTZxEN4BUzOebSJUDYFVK66DxypNq81Ap/exec';
         
         this.noteDatabase = {
@@ -65,30 +64,39 @@ class GuitarTrainingApp {
     }
     
     createFretboard() {
-        this.fretboard.innerHTML = '';
+        // Para cada una de las 6 celdas del diapasón, dibujar:
+        // - La línea de la cuerda (centrada verticalmente)
+        // - Los 5 puntos interactivos (trastes 0, 1, 2, 3, 4)
+        // - Las barras de trastes (solo en la primera celda, para que se vean continuas)
         
-        const totalHeight = 348;
-        const stringSpacing = totalHeight / 6;
         const pointSize = 38;
         
-        // Dibujar trastes
+        // Dibujar barras de trastes en la primera celda (se extienden visualmente por todas)
+        const firstCell = document.getElementById('fretboard-cell-1');
         for (let i = 1; i <= 4; i++) {
-            const fret = document.createElement('div');
-            fret.className = 'fret';
-            fret.style.left = `${((4 - i) / 4) * 100}%`;
-            this.fretboard.appendChild(fret);
+            const fretBar = document.createElement('div');
+            fretBar.className = 'fret-bar';
+            const leftPercent = ((4 - i) / 4) * 100;
+            fretBar.style.left = `calc(${leftPercent}% - 2px)`;
+            // La barra debe extenderse por todas las celdas (6 × 58px = 348px)
+            fretBar.style.height = '348px';
+            fretBar.style.position = 'absolute';
+            fretBar.style.top = '0';
+            firstCell.appendChild(fretBar);
         }
         
-        // Dibujar cuerdas y puntos
+        // Para cada cuerda (6 a 1), dibujar la línea y los puntos
         for (let string = 6; string >= 1; string--) {
-            const stringIndex = 6 - string;
-            const stringCenter = (stringIndex * stringSpacing) + (stringSpacing / 2);
+            const cellIndex = 6 - string; // 0 para 6ª, 5 para 1ª
+            const cell = document.getElementById(`fretboard-cell-${cellIndex + 1}`);
             
+            // Línea de la cuerda
             const stringLine = document.createElement('div');
-            stringLine.className = 'string';
-            stringLine.style.top = `${stringCenter}px`;
-            this.fretboard.appendChild(stringLine);
+            stringLine.className = 'string-line';
+            if (string >= 5) stringLine.classList.add('thick'); // 6ª y 5ª más gruesas
+            cell.appendChild(stringLine);
             
+            // Puntos interactivos para cada traste
             for (let fret = 0; fret <= 4; fret++) {
                 const point = document.createElement('div');
                 point.className = 'fret-point';
@@ -97,10 +105,9 @@ class GuitarTrainingApp {
                 
                 const leftPercent = ((4 - fret) / 4) * 100;
                 point.style.left = `calc(${leftPercent}% - ${pointSize / 2}px)`;
-                point.style.top = `${stringCenter - (pointSize / 2)}px`;
                 
                 point.addEventListener('click', () => this.handleFretClick(string, fret, point));
-                this.fretboard.appendChild(point);
+                cell.appendChild(point);
             }
         }
     }
@@ -232,7 +239,7 @@ class GuitarTrainingApp {
         const group = document.getElementById('studentGroup').value.trim();
         
         if (!email || !name || !group) {
-            alert('️ Por favor, completa todos los campos de registro antes de verificar.');
+            alert('⚠️ Por favor, completa todos los campos de registro antes de verificar.');
             document.getElementById('studentEmail').focus();
             return;
         }
@@ -275,10 +282,10 @@ class GuitarTrainingApp {
         scoreDisplay.style.display = 'block';
         document.getElementById('scoreValue').textContent = score.percentage;
         
-        let text = ' Sigue practicando, ¡tú puedes!';
-        if (score.percentage === 100) text = '🌟 ¡Perfecto! ¡Excelente posición!';
+        let text = '📚 Sigue practicando, ¡tú puedes!';
+        if (score.percentage === 100) text = ' ¡Perfecto! ¡Excelente posición!';
         else if (score.percentage >= 80) text = '👏 ¡Muy bien! Casi perfecto';
-        else if (score.percentage >= 60) text = ' Bien, sigue practicando';
+        else if (score.percentage >= 60) text = '👍 Bien, sigue practicando';
         else if (score.percentage >= 40) text = '💪 Vas por buen camino, continúa';
         document.getElementById('feedbackText').textContent = text;
         
