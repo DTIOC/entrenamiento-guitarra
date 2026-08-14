@@ -7,7 +7,7 @@
     <title>Entrenamiento de Guitarra - Notas y Acordes</title>
     
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=9">
     <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.min.js"></script>
 </head>
 <body>
@@ -26,8 +26,8 @@
         </div>
 
         <div class="mode-selector">
-            <button id="btnModeNotes" class="btn btn-mode active">🎵 Notas Sueltas</button>
-            <button id="btnModeChords" class="btn btn-mode"> Acordes</button>
+            <button id="btnModeNotes" class="btn btn-mode active"> Notas Sueltas</button>
+            <button id="btnModeChords" class="btn btn-mode">🎸 Acordes</button>
         </div>
 
         <div class="game-area">
@@ -58,7 +58,7 @@
         <!-- DIAGRAMA DE GUITARRA: CABEZAL A LA DERECHA, 6ª CUERDA ARRIBA -->
         <div class="guitar-diagram">
             <div class="diagram-outer">
-                <!-- Etiquetas de cuerdas (ahora a la izquierda) -->
+                <!-- Etiquetas de cuerdas (a la izquierda) -->
                 <div class="string-labels">
                     <span>6ª (Mi)</span>
                     <span>5ª (La)</span>
@@ -71,17 +71,17 @@
                 <!-- Diapasón -->
                 <div class="fretboard-container">
                     <div class="fretboard" id="fretboard"></div>
-                    <!-- Números romanos alineados con cada traste -->
+                    <!-- Números romanos alineados con cada traste (de izquierda a derecha: IV a 0) -->
                     <div class="fret-numbers">
-                        <span class="fret-number" style="left: 0%;">0</span>
-                        <span class="fret-number" style="left: 25%;">I</span>
+                        <span class="fret-number" style="left: 0%;">IV</span>
+                        <span class="fret-number" style="left: 25%;">III</span>
                         <span class="fret-number" style="left: 50%;">II</span>
-                        <span class="fret-number" style="left: 75%;">III</span>
-                        <span class="fret-number" style="left: 100%;">IV</span>
+                        <span class="fret-number" style="left: 75%;">I</span>
+                        <span class="fret-number open" style="left: 100%;">0</span>
                     </div>
                 </div>
 
-                <!-- Cabeza de la guitarra (ahora a la DERECHA) -->
+                <!-- Cabeza de la guitarra (a la DERECHA) -->
                 <div class="guitar-head">
                     <div class="head-shape">
                         <div class="tuning-peg"></div>
@@ -100,7 +100,7 @@
         </div>
     </div>
 
-    <script src="app.js?v=7"></script>
+    <script src="app.js?v=9"></script>
     
     <script>
         if ('serviceWorker' in navigator) {
