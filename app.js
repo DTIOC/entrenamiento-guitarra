@@ -204,9 +204,9 @@ class GuitarTrainingApp {
                 feedback.style.color = '#fff';
             }, 1000);
         } else {
-            const positions = this.currentExercise.positions;
+                        const positions = this.currentExercise.positions;
             const notesToPlay = [];
-            for (let string = 1; string <= 6; string++) {
+            for (let string = 6; string >= 1; string--) {
                 const fret = positions[string];
                 if (fret >= 0 && fret <= 4) {
                     const note = this.noteDatabase[string][fret];
