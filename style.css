@@ -1,7 +1,164 @@
-/* ===== DIAGRAMA DE GUITARRA: CABEZAL A LA DERECHA ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #e94560;
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.student-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.student-info h3 {
+    margin-bottom: 15px;
+    color: #e94560;
+}
+
+.student-info input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+}
+
+.mode-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-mode {
+    flex: 1;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-mode.active {
+    background: #e94560;
+    border-color: #e94560;
+}
+
+.btn-mode:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.game-area {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-primary { background: #e94560; color: white; }
+.btn-primary:hover { background: #ff6b6b; }
+.btn-secondary { background: #0f3460; color: white; }
+.btn-secondary:hover { background: #1a4a7a; }
+.btn-success { background: #00d9a5; color: #1a1a2e; }
+.btn-success:hover { background: #00f5b8; }
+.btn-warning { background: #ffc107; color: #1a1a2e; }
+.btn-warning:hover { background: #ffdb4d; }
+
+.info-panel {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.feedback {
+    min-height: 60px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.score-display {
+    background: linear-gradient(135deg, #00d9a5 0%, #00f5b8 100%);
+    color: #1a1a2e;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.score-display h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* ===== DIAGRAMA DE GUITARRA ===== */
 .guitar-diagram {
     background: rgba(255, 255, 255, 0.1);
-    padding: 25px;
+    padding: 30px;
     border-radius: 15px;
     margin-bottom: 20px;
 }
@@ -9,25 +166,25 @@
 .diagram-outer {
     display: flex;
     align-items: stretch;
-    gap: 8px;
+    gap: 10px;
 }
 
-/* Etiquetas de cuerdas (a la izquierda) */
+/* Etiquetas de cuerdas */
 .string-labels {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-width: 80px;
-    padding: 12px 5px; /* Padding superior e inferior igual al head-shape */
+    width: 80px;
+    padding: 10px 5px;
 }
 
 .string-labels span {
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #e94560;
     display: flex;
     align-items: center;
-    height: 50px; /* Altura fija para cada etiqueta */
+    height: 50px;
     text-align: right;
     padding-right: 5px;
 }
@@ -45,7 +202,7 @@
     height: 350px;
     background: linear-gradient(to bottom, #8B4513 0%, #654321 100%);
     border: 4px solid #333;
-    border-right: 8px solid #2a1a0a; /* Cejuela a la DERECHA */
+    border-right: 8px solid #2a1a0a;
     border-radius: 8px 0 0 8px;
     overflow: visible;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
@@ -65,13 +222,14 @@
     position: absolute;
     left: 0;
     right: 0;
-    height: 2px;
+    height: 3px;
     background: linear-gradient(to right, #555, #333, #555);
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
     z-index: 1;
 }
 
-.string:nth-child(odd) {
+.string:nth-child(1),
+.string:nth-child(2) {
     height: 4px;
 }
 
@@ -117,11 +275,11 @@
     box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
 }
 
-/* Números romanos alineados con cada traste */
+/* Números romanos */
 .fret-numbers {
     position: relative;
-    height: 30px;
-    margin-top: 12px;
+    height: 35px;
+    margin-top: 10px;
     width: 100%;
 }
 
@@ -142,16 +300,16 @@
     transform: translateX(-100%);
 }
 
-/* Cabeza de la guitarra (a la DERECHA) */
+/* Cabeza de la guitarra */
 .guitar-head {
     display: flex;
     align-items: center;
-    padding: 12px 0; /* Mismo padding que string-labels */
+    padding: 10px 0;
 }
 
 .head-shape {
     position: relative;
-    width: 35px;
+    width: 40px;
     height: 100%;
     background: linear-gradient(to left, #654321, #8B4513);
     border-radius: 0 20px 20px 0;
@@ -165,8 +323,8 @@
 }
 
 .tuning-peg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     background: radial-gradient(circle, #C0C0C0 30%, #808080 100%);
     border: 2px solid #555;
     border-radius: 50%;
@@ -186,10 +344,10 @@
 @media (max-width: 600px) {
     .fretboard { height: 300px; }
     .fret-point { width: 32px; height: 32px; font-size: 0.8rem; }
-    .string-labels { min-width: 65px; }
-    .string-labels span { font-size: 0.75rem; height: 42px; }
-    .head-shape { width: 25px; }
-    .tuning-peg { width: 14px; height: 14px; }
+    .string-labels { width: 65px; }
+    .string-labels span { font-size: 0.8rem; height: 42px; }
+    .head-shape { width: 30px; }
+    .tuning-peg { width: 16px; height: 16px; }
     header h1 { font-size: 1.8rem; }
     .controls { grid-template-columns: 1fr; }
 }
