@@ -64,39 +64,31 @@ class GuitarTrainingApp {
     }
     
     createFretboard() {
-        // Para cada una de las 6 celdas del diapasón, dibujar:
-        // - La línea de la cuerda (centrada verticalmente)
-        // - Los 5 puntos interactivos (trastes 0, 1, 2, 3, 4)
-        // - Las barras de trastes (solo en la primera celda, para que se vean continuas)
-        
         const pointSize = 38;
         
-        // Dibujar barras de trastes en la primera celda (se extienden visualmente por todas)
+        // Dibujar barras de trastes en la primera celda
         const firstCell = document.getElementById('fretboard-cell-1');
         for (let i = 1; i <= 4; i++) {
             const fretBar = document.createElement('div');
             fretBar.className = 'fret-bar';
             const leftPercent = ((4 - i) / 4) * 100;
             fretBar.style.left = `calc(${leftPercent}% - 2px)`;
-            // La barra debe extenderse por todas las celdas (6 × 58px = 348px)
             fretBar.style.height = '348px';
             fretBar.style.position = 'absolute';
             fretBar.style.top = '0';
             firstCell.appendChild(fretBar);
         }
         
-        // Para cada cuerda (6 a 1), dibujar la línea y los puntos
+        // Dibujar cuerdas y puntos en cada celda
         for (let string = 6; string >= 1; string--) {
-            const cellIndex = 6 - string; // 0 para 6ª, 5 para 1ª
+            const cellIndex = 6 - string;
             const cell = document.getElementById(`fretboard-cell-${cellIndex + 1}`);
             
-            // Línea de la cuerda
             const stringLine = document.createElement('div');
             stringLine.className = 'string-line';
-            if (string >= 5) stringLine.classList.add('thick'); // 6ª y 5ª más gruesas
+            if (string >= 5) stringLine.classList.add('thick');
             cell.appendChild(stringLine);
             
-            // Puntos interactivos para cada traste
             for (let fret = 0; fret <= 4; fret++) {
                 const point = document.createElement('div');
                 point.className = 'fret-point';
@@ -119,6 +111,8 @@ class GuitarTrainingApp {
         document.getElementById('btnGenerate').addEventListener('click', () => this.generateNewExercise());
         document.getElementById('btnCheck').addEventListener('click', () => this.checkExercise());
         document.getElementById('btnClear').addEventListener('click', () => this.clearPositions());
+        // NUEVO: Event listener para el botón de tocar el acorde del usuario
+        document.getElementById('btnPlayUser').addEventListener('click', () => this.playUserChord());
     }
     
     setMode(mode) {
@@ -226,6 +220,39 @@ class GuitarTrainingApp {
             }, 1500);
         }
     }
+
+    // NUEVA FUNCIÓN: Tocar el acorde que el usuario acaba de formar
+    async playUserChord() {
+        await this.initAudio();
+        
+        if (this.userPositions.length === 0) {
+            document.getElementById('feedback').textContent = '⚠️ Primero coloca los dedos en el diagrama para escuchar tu acorde';
+            return;
+        }
+
+        const feedback = document.getElementById('feedback');
+        feedback.textContent = '🎵 Escuchando tu acorde...';
+        feedback.style.color = '#00d9a5';
+
+        // Ordenar las notas de la 6ª cuerda a la 1ª para simular un rasgueo natural
+        const sortedPositions = [...this.userPositions].sort((a, b) => b.string - a.string);
+        const notesToPlay = [];
+
+        sortedPositions.forEach(pos => {
+            const noteName = this.noteDatabase[pos.string][pos.fret];
+            if (noteName) notesToPlay.push(noteName);
+        });
+
+        // Tocar con un ligero efecto de rasgueo (60ms entre cada nota)
+        notesToPlay.forEach((note, index) => {
+            setTimeout(() => this.playNote(note), index * 60);
+        });
+
+        setTimeout(() => {
+            feedback.textContent = '✅ Compara el sonido con el modelo';
+            feedback.style.color = '#fff';
+        }, notesToPlay.length * 60 + 500);
+    }
     
     clearPositions() {
         this.userPositions = [];
@@ -244,7 +271,7 @@ class GuitarTrainingApp {
             return;
         }
         if (this.userPositions.length === 0) {
-            document.getElementById('feedback').textContent = '⚠️ Primero coloca los dedos en el diagrama';
+            document.getElementById('feedback').textContent = '️ Primero coloca los dedos en el diagrama';
             return;
         }
         
@@ -283,8 +310,8 @@ class GuitarTrainingApp {
         document.getElementById('scoreValue').textContent = score.percentage;
         
         let text = '📚 Sigue practicando, ¡tú puedes!';
-        if (score.percentage === 100) text = ' ¡Perfecto! ¡Excelente posición!';
-        else if (score.percentage >= 80) text = '👏 ¡Muy bien! Casi perfecto';
+        if (score.percentage === 100) text = '🌟 ¡Perfecto! ¡Excelente posición!';
+        else if (score.percentage >= 80) text = ' ¡Muy bien! Casi perfecto';
         else if (score.percentage >= 60) text = '👍 Bien, sigue practicando';
         else if (score.percentage >= 40) text = '💪 Vas por buen camino, continúa';
         document.getElementById('feedbackText').textContent = text;
