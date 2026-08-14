@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 950px;
     margin: 0 auto;
 }
 
@@ -113,41 +113,14 @@ header p {
     transform: scale(0.95);
 }
 
-.btn-primary {
-    background: #e94560;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #ff6b6b;
-}
-
-.btn-secondary {
-    background: #0f3460;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: #1a4a7a;
-}
-
-.btn-success {
-    background: #00d9a5;
-    color: #1a1a2e;
-}
-
-.btn-success:hover {
-    background: #00f5b8;
-}
-
-.btn-warning {
-    background: #ffc107;
-    color: #1a1a2e;
-}
-
-.btn-warning:hover {
-    background: #ffdb4d;
-}
+.btn-primary { background: #e94560; color: white; }
+.btn-primary:hover { background: #ff6b6b; }
+.btn-secondary { background: #0f3460; color: white; }
+.btn-secondary:hover { background: #1a4a7a; }
+.btn-success { background: #00d9a5; color: #1a1a2e; }
+.btn-success:hover { background: #00f5b8; }
+.btn-warning { background: #ffc107; color: #1a1a2e; }
+.btn-warning:hover { background: #ffdb4d; }
 
 .info-panel {
     display: flex;
@@ -182,31 +155,75 @@ header p {
     margin-bottom: 10px;
 }
 
-/* DIAGRAMA DE GUITARRA - ACTUALIZADO */
+/* ===== DIAGRAMA DE GUITARRA COMPLETO ===== */
 .guitar-diagram {
     background: rgba(255, 255, 255, 0.1);
-    padding: 30px;
+    padding: 25px;
     border-radius: 15px;
     margin-bottom: 20px;
 }
 
+.diagram-outer {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+/* Cabeza de la guitarra (lado izquierdo) */
+.guitar-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    padding: 10px 0;
+}
+
+.head-curve {
+    width: 25px;
+    height: 30px;
+    border: 3px solid #8B4513;
+    border-right: none;
+    border-radius: 15px 0 0 15px;
+    background: linear-gradient(to right, #654321, #8B4513);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Etiquetas de cuerdas */
 .string-labels {
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 15px;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 90px;
+    padding: 10px 5px;
+}
+
+.string-labels span {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #e94560;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    text-align: right;
+    padding-right: 5px;
+}
+
+/* Contenedor del diapasón */
+.fretboard-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .fretboard {
     position: relative;
     width: 100%;
-    height: 350px; /* Aumentado de 300px */
+    height: 350px;
     background: linear-gradient(to bottom, #8B4513 0%, #654321 100%);
     border: 4px solid #333;
-    border-radius: 8px;
-    overflow: visible; /* Cambiado para que se vean los círculos completos */
+    border-left: 8px solid #2a1a0a; /* Cejuela más gruesa */
+    border-radius: 0 8px 8px 0;
+    overflow: visible;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -214,7 +231,7 @@ header p {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 3px; /* Aumentado de 2px */
+    width: 3px;
     background: linear-gradient(to bottom, #C0C0C0, #808080, #C0C0C0);
     box-shadow: 1px 0 2px rgba(0, 0, 0, 0.3);
 }
@@ -229,31 +246,30 @@ header p {
 }
 
 .string:nth-child(odd) {
-    height: 4px; /* Aumentado de 3px para cuerdas graves */
+    height: 4px;
 }
 
 .fret-point {
     position: absolute;
-    width: 40px; /* Aumentado de 30px */
-    height: 40px; /* Aumentado de 30px */
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.25);
-    border: 3px solid rgba(255, 255, 255, 0.6); /* Borde más grueso */
+    border: 3px solid rgba(255, 255, 255, 0.6);
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: 1rem; /* Aumentado */
+    font-size: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    z-index: 10; /* Asegura que estén encima */
+    z-index: 10;
 }
 
 .fret-point:hover {
     background: rgba(255, 255, 255, 0.5);
     transform: scale(1.15);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .fret-point.active {
@@ -278,9 +294,9 @@ header p {
 .fret-numbers {
     display: flex;
     justify-content: space-around;
-    margin-top: 15px;
+    margin-top: 12px;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #C0C0C0;
 }
 
@@ -294,21 +310,12 @@ header p {
 
 /* Responsive */
 @media (max-width: 600px) {
-    .fretboard {
-        height: 300px;
-    }
-    
-    .fret-point {
-        width: 35px;
-        height: 35px;
-        font-size: 0.9rem;
-    }
-    
-    header h1 {
-        font-size: 1.8rem;
-    }
-    
-    .controls {
-        grid-template-columns: 1fr;
-    }
+    .fretboard { height: 300px; }
+    .fret-point { width: 35px; height: 35px; font-size: 0.9rem; }
+    .string-labels { min-width: 70px; }
+    .string-labels span { font-size: 0.8rem; }
+    .guitar-head { width: 18px; }
+    .head-curve { width: 18px; height: 25px; }
+    header h1 { font-size: 1.8rem; }
+    .controls { grid-template-columns: 1fr; }
 }
