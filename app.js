@@ -7,7 +7,6 @@ class GuitarTrainingApp {
         this.fretboard = document.getElementById('fretboard');
         this.webhookURL = 'https://script.google.com/macros/s/AKfycbz4dyyFtNkyHYmkSokJDSx5pmucX2sGqaiRTZxEN4BUzOebSJUDYFVK66DxypNq81Ap/exec';
         
-        // BASE DE DATOS: 5 notas por cuerda (trastes 0, 1, 2, 3, 4)
         this.noteDatabase = {
             6: ['Mi2', 'Fa2', 'Fa#2', 'Sol2', 'Sol#2'],
             5: ['La2', 'La#2', 'Si2', 'Do3', 'Do#3'],
@@ -68,24 +67,21 @@ class GuitarTrainingApp {
     createFretboard() {
         this.fretboard.innerHTML = '';
         
-        const totalHeight = 350; // Altura del diapasón
-        const stringSpacing = totalHeight / 6; // Espacio entre cuerdas
-        const pointSize = 38; // Tamaño del círculo
+        const totalHeight = 350;
+        const stringSpacing = totalHeight / 6;
+        const pointSize = 38;
         
-        // 1. DIBUJAR TRASTES (barras metálicas)
-        // La cejuela (traste 0) está a la derecha (100%).
-        // Los trastes I, II, III, IV van hacia la izquierda.
+        // Dibujar trastes
         for (let i = 1; i <= 4; i++) {
             const fret = document.createElement('div');
             fret.className = 'fret';
-            // i=1 (I) -> 75%, i=2 (II) -> 50%, i=3 (III) -> 25%, i=4 (IV) -> 0%
             fret.style.left = `${((4 - i) / 4) * 100}%`;
             this.fretboard.appendChild(fret);
         }
         
-        // 2. DIBUJAR CUERDAS Y PUNTOS (De la 6ª arriba a la 1ª abajo)
+        // Dibujar cuerdas y puntos
         for (let string = 6; string >= 1; string--) {
-            const stringIndex = 6 - string; // 0, 1, 2, 3, 4, 5
+            const stringIndex = 6 - string;
             const stringTop = (stringIndex * stringSpacing) + (stringSpacing / 2);
             
             const stringLine = document.createElement('div');
@@ -93,16 +89,12 @@ class GuitarTrainingApp {
             stringLine.style.top = `${stringTop}px`;
             this.fretboard.appendChild(stringLine);
             
-            // Puntos en cada traste (0, 1, 2, 3, 4)
             for (let fret = 0; fret <= 4; fret++) {
                 const point = document.createElement('div');
                 point.className = 'fret-point';
                 point.dataset.string = string;
                 point.dataset.fret = fret;
                 
-                // LÓGICA INVERTIDA: 
-                // Fret 0 (al aire) -> 100% (derecha)
-                // Fret 4 -> 0% (izquierda)
                 const leftPercent = ((4 - fret) / 4) * 100;
                 point.style.left = `calc(${leftPercent}% - ${pointSize / 2}px)`;
                 point.style.top = `${stringTop - (pointSize / 2)}px`;
@@ -240,12 +232,12 @@ class GuitarTrainingApp {
         const group = document.getElementById('studentGroup').value.trim();
         
         if (!email || !name || !group) {
-            alert('️ Por favor, completa todos los campos de registro antes de verificar.');
+            alert('⚠️ Por favor, completa todos los campos de registro antes de verificar.');
             document.getElementById('studentEmail').focus();
             return;
         }
         if (this.userPositions.length === 0) {
-            document.getElementById('feedback').textContent = '⚠️ Primero coloca los dedos en el diagrama';
+            document.getElementById('feedback').textContent = '️ Primero coloca los dedos en el diagrama';
             return;
         }
         
