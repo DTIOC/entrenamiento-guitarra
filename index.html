@@ -7,7 +7,7 @@
     <title>Entrenamiento de Guitarra - Notas y Acordes</title>
     
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="stylesheet" href="style.css?v=12">
     <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.min.js"></script>
 </head>
 <body>
@@ -55,18 +55,19 @@
             </div>
         </div>
 
+        <!-- DIAGRAMA REESTRUCTURADO -->
         <div class="guitar-diagram">
-            <div class="diagram-outer">
-                <div class="string-labels">
-                    <span>6ª (Mi)</span>
-                    <span>5ª (La)</span>
-                    <span>4ª (Re)</span>
-                    <span>3ª (Sol)</span>
-                    <span>2ª (Si)</span>
-                    <span>1ª (Mi)</span>
-                </div>
+            <div class="diagram-grid">
+                <!-- Etiquetas de cuerdas (cada una en su propia fila) -->
+                <span class="string-label" data-row="1">6ª (Mi)</span>
+                <span class="string-label" data-row="2">5ª (La)</span>
+                <span class="string-label" data-row="3">4ª (Re)</span>
+                <span class="string-label" data-row="4">3ª (Sol)</span>
+                <span class="string-label" data-row="5">2ª (Si)</span>
+                <span class="string-label" data-row="6">1ª (Mi)</span>
                 
-                <div class="fretboard-container">
+                <!-- Diapasón (ocupa las 6 filas) -->
+                <div class="fretboard-wrapper">
                     <div class="fretboard" id="fretboard"></div>
                     <div class="fret-numbers">
                         <span class="fret-number" style="left: 0%;">IV</span>
@@ -77,16 +78,14 @@
                     </div>
                 </div>
 
-                <div class="guitar-head">
-                    <div class="head-shape">
-                        <div class="tuning-peg"></div>
-                        <div class="tuning-peg"></div>
-                        <div class="tuning-peg"></div>
-                        <div class="tuning-peg"></div>
-                        <div class="tuning-peg"></div>
-                        <div class="tuning-peg"></div>
-                    </div>
-                </div>
+                <!-- Cabeza con clavijas (cada una en su propia fila) -->
+                <div class="head-background"></div>
+                <div class="tuning-peg" data-row="1"></div>
+                <div class="tuning-peg" data-row="2"></div>
+                <div class="tuning-peg" data-row="3"></div>
+                <div class="tuning-peg" data-row="4"></div>
+                <div class="tuning-peg" data-row="5"></div>
+                <div class="tuning-peg" data-row="6"></div>
             </div>
         </div>
 
@@ -95,7 +94,7 @@
         </div>
     </div>
 
-    <script src="app.js?v=11"></script>
+    <script src="app.js?v=12"></script>
     
     <script>
         if ('serviceWorker' in navigator) {
