@@ -166,26 +166,40 @@ header p {
 .diagram-outer {
     display: flex;
     align-items: stretch;
-    gap: 10px;
+    gap: 8px;
 }
 
-/* Cabeza de la guitarra (lado izquierdo) */
+/* Cabeza de la guitarra con forma curva */
 .guitar-head {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 25px;
+    align-items: center;
     padding: 10px 0;
 }
 
-.head-curve {
-    width: 25px;
-    height: 30px;
-    border: 3px solid #8B4513;
-    border-right: none;
-    border-radius: 15px 0 0 15px;
+.head-shape {
+    position: relative;
+    width: 35px;
+    height: 100%;
     background: linear-gradient(to right, #654321, #8B4513);
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    border-radius: 20px 0 0 20px;
+    border: 3px solid #4a2f1a;
+    border-right: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px 5px;
+    box-shadow: -3px 0 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Clavijas (tuning pegs) */
+.tuning-peg {
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle, #C0C0C0 30%, #808080 100%);
+    border: 2px solid #555;
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    align-self: flex-end;
 }
 
 /* Etiquetas de cuerdas */
@@ -193,13 +207,13 @@ header p {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-width: 90px;
+    min-width: 80px;
     padding: 10px 5px;
 }
 
 .string-labels span {
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #e94560;
     display: flex;
     align-items: center;
@@ -221,7 +235,7 @@ header p {
     height: 350px;
     background: linear-gradient(to bottom, #8B4513 0%, #654321 100%);
     border: 4px solid #333;
-    border-left: 8px solid #2a1a0a; /* Cejuela más gruesa */
+    border-left: 8px solid #2a1a0a;
     border-radius: 0 8px 8px 0;
     overflow: visible;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
@@ -231,9 +245,10 @@ header p {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 3px;
-    background: linear-gradient(to bottom, #C0C0C0, #808080, #C0C0C0);
-    box-shadow: 1px 0 2px rgba(0, 0, 0, 0.3);
+    width: 4px;
+    background: linear-gradient(to bottom, #E8E8E8, #A0A0A0, #E8E8E8);
+    box-shadow: 2px 0 3px rgba(0, 0, 0, 0.4);
+    z-index: 2;
 }
 
 .string {
@@ -241,8 +256,9 @@ header p {
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(to right, #444, #222, #444);
+    background: linear-gradient(to right, #555, #333, #555);
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+    z-index: 1;
 }
 
 .string:nth-child(odd) {
@@ -251,25 +267,25 @@ header p {
 
 .fret-point {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.25);
-    border: 3px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.5);
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.9rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     z-index: 10;
 }
 
 .fret-point:hover {
-    background: rgba(255, 255, 255, 0.5);
-    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
 }
 
 .fret-point.active {
@@ -291,13 +307,25 @@ header p {
     box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
 }
 
+/* Números romanos de trastes */
 .fret-numbers {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-top: 12px;
+    padding: 0 10px;
+}
+
+.fret-number {
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #C0C0C0;
+    text-align: center;
+    flex: 1;
+}
+
+.fret-number.open {
+    color: #e94560;
+    font-size: 1rem;
 }
 
 .instructions {
@@ -311,11 +339,11 @@ header p {
 /* Responsive */
 @media (max-width: 600px) {
     .fretboard { height: 300px; }
-    .fret-point { width: 35px; height: 35px; font-size: 0.9rem; }
-    .string-labels { min-width: 70px; }
-    .string-labels span { font-size: 0.8rem; }
-    .guitar-head { width: 18px; }
-    .head-curve { width: 18px; height: 25px; }
+    .fret-point { width: 32px; height: 32px; font-size: 0.8rem; }
+    .string-labels { min-width: 65px; }
+    .string-labels span { font-size: 0.75rem; }
+    .head-shape { width: 25px; }
+    .tuning-peg { width: 14px; height: 14px; }
     header h1 { font-size: 1.8rem; }
     .controls { grid-template-columns: 1fr; }
 }
