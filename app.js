@@ -68,9 +68,9 @@ class GuitarTrainingApp {
     createFretboard() {
         this.fretboard.innerHTML = '';
         
-        // 1. DIBUJAR TRASTES (barras metálicas en posiciones 0, 1, 2, 3, 4)
-        // El traste 0 es la cejuela (borde izquierdo), los demás se distribuyen
-        for (let i = 1; i <= 4; i++) {
+        // 1. DIBUJAR TRASTES (barras metálicas)
+        // Traste 0 = cejuela (derecha), trastes 1-4 hacia la izquierda
+        for (let i = 0; i <= 4; i++) {
             const fret = document.createElement('div');
             fret.className = 'fret';
             fret.style.left = `${(i / 4) * 100}%`;
@@ -92,8 +92,7 @@ class GuitarTrainingApp {
                 point.dataset.string = string;
                 point.dataset.fret = fret;
                 
-                // Posición horizontal: centrada entre trastes
-                // Traste 0 = al inicio, traste 1 = 25%, traste 2 = 50%, etc.
+                // Posición horizontal: alineada con cada traste
                 const leftPercent = (fret / 4) * 100;
                 point.style.left = `calc(${leftPercent}% - 19px)`;
                 point.style.top = `calc(${(visualIndex / 5) * 100}% - 19px)`;
@@ -237,7 +236,7 @@ class GuitarTrainingApp {
             return;
         }
         if (this.userPositions.length === 0) {
-            document.getElementById('feedback').textContent = '️ Primero coloca los dedos en el diagrama';
+            document.getElementById('feedback').textContent = '⚠️ Primero coloca los dedos en el diagrama';
             return;
         }
         
@@ -276,8 +275,8 @@ class GuitarTrainingApp {
         document.getElementById('scoreValue').textContent = score.percentage;
         
         let text = '📚 Sigue practicando, ¡tú puedes!';
-        if (score.percentage === 100) text = '🌟 ¡Perfecto! ¡Excelente posición!';
-        else if (score.percentage >= 80) text = ' ¡Muy bien! Casi perfecto';
+        if (score.percentage === 100) text = ' ¡Perfecto! ¡Excelente posición!';
+        else if (score.percentage >= 80) text = '👏 ¡Muy bien! Casi perfecto';
         else if (score.percentage >= 60) text = '👍 Bien, sigue practicando';
         else if (score.percentage >= 40) text = '💪 Vas por buen camino, continúa';
         document.getElementById('feedbackText').textContent = text;
