@@ -1,5 +1,5 @@
 // Guitar Training App - Notes and Chords
-// Using Tone.js for audio synthesis
+// Using Tone.js for audio synthesis con sonido de guitarra
 
 class GuitarTrainingApp {
     constructor() {
@@ -58,10 +58,31 @@ class GuitarTrainingApp {
     async initAudio() {
         if (!this.synth) {
             await Tone.start();
-            this.synth = new Tone.PolySynth(Tone.GuitarSynth, {
-                oscillator: { type: "triangle" },
-                envelope: { attack: 0.02, decay: 0.3, sustain: 0.5, release: 1 }
+            // SONIDO MÁS REALISTA DE GUITARRA
+            this.synth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: {
+                    type: "sawtooth", // Diente de sierra para más armónicos (como cuerda)
+                    harmonicity: 1.2
+                },
+                envelope: {
+                    attack: 0.01,      // Ataque rápido como púa
+                    decay: 0.4,        // Decaimiento natural
+                    sustain: 0.3,      // Sustain moderado
+                    release: 1.5       // Release largo como cuerda vibrando
+                },
+                volume: -5
             }).toDestination();
+            
+            // Agregar efectos para sonar más como guitarra
+            const distortion = new Tone.Distortion(0.1).toDestination();
+            const filter = new Tone.Filter(3000, "lowpass").toDestination();
+            const reverb = new Tone.Reverb({
+                decay: 2.5,
+                wet: 0.25
+            }).toDestination();
+            
+            this.synth.connect(filter);
+            filter.connect(reverb);
         }
     }
     
@@ -89,8 +110,8 @@ class GuitarTrainingApp {
                 point.className = 'fret-point';
                 point.dataset.string = string;
                 point.dataset.fret = fret;
-                point.style.left = `calc(${(fret / 3) * 100}% - 15px)`;
-                point.style.top = `calc(${((string - 1) / 5) * 100}% - 15px)`;
+                point.style.left = `calc(${(fret / 3) * 100}% - 20px)`; // Ajustado para círculo más grande
+                point.style.top = `calc(${((string - 1) / 5) * 100}% - 20px)`; // Ajustado
                 
                 point.addEventListener('click', () => this.handleFretClick(string, fret, point));
                 this.fretboard.appendChild(point);
@@ -216,7 +237,10 @@ class GuitarTrainingApp {
                 }
             }
             
-            notesToPlay.forEach(note => this.playNote(note));
+            // Reproducir con un pequeño arpegio para sonar más natural
+            notesToPlay.forEach((note, index) => {
+                setTimeout(() => this.playNote(note), index * 50);
+            });
             
             setTimeout(() => {
                 feedback.textContent = '✅ Ahora forma el acorde en el diagrama';
@@ -240,7 +264,7 @@ class GuitarTrainingApp {
         const group = document.getElementById('studentGroup').value.trim();
         
         if (!email || !name || !group) {
-            alert('⚠️ Por favor, completa todos los campos de registro antes de verificar.');
+            alert('️ Por favor, completa todos los campos de registro antes de verificar.');
             document.getElementById('studentEmail').focus();
             return;
         }
@@ -299,9 +323,9 @@ class GuitarTrainingApp {
         
         if (score.percentage === 100) feedbackText.textContent = '🌟 ¡Perfecto! ¡Excelente posición!';
         else if (score.percentage >= 80) feedbackText.textContent = '👏 ¡Muy bien! Casi perfecto';
-        else if (score.percentage >= 60) feedbackText.textContent = '👍 Bien, sigue practicando';
+        else if (score.percentage >= 60) feedbackText.textContent = ' Bien, sigue practicando';
         else if (score.percentage >= 40) feedbackText.textContent = '💪 Vas por buen camino, continúa';
-        else feedbackText.textContent = '📚 Sigue practicando, ¡tú puedes!';
+        else feedbackText.textContent = ' Sigue practicando, ¡tú puedes!';
         
         document.getElementById('feedback').innerHTML = `
             Posiciones correctas: ${score.correct}/${score.total}<br>
