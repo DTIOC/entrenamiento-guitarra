@@ -155,7 +155,7 @@ header p {
     margin-bottom: 10px;
 }
 
-/* ===== DIAGRAMA DE GUITARRA CON GRID PERFECTO ===== */
+/* ===== DIAGRAMA DE GUITARRA CON GRID UNIFICADO ===== */
 .guitar-diagram {
     background: rgba(255, 255, 255, 0.1);
     padding: 30px;
@@ -163,46 +163,47 @@ header p {
     margin-bottom: 20px;
 }
 
-.diagram-outer {
+.diagram-grid {
     display: grid;
     grid-template-columns: 80px 1fr 40px;
     grid-template-rows: repeat(6, 58px);
-    gap: 0;
     align-items: center;
+    position: relative;
 }
 
-.string-labels {
+/* Etiquetas de cuerdas */
+.string-label {
     grid-column: 1;
-    grid-row: 1 / 7;
-    display: grid;
-    grid-template-rows: repeat(6, 58px);
-    align-items: center;
-    padding-right: 8px;
-}
-
-.string-labels span {
     font-weight: bold;
     font-size: 0.95rem;
     color: #e94560;
     text-align: right;
+    padding-right: 10px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    height: 58px;
-    padding-right: 5px;
 }
 
-.fretboard-container {
+.string-label[data-row="1"] { grid-row: 1; }
+.string-label[data-row="2"] { grid-row: 2; }
+.string-label[data-row="3"] { grid-row: 3; }
+.string-label[data-row="4"] { grid-row: 4; }
+.string-label[data-row="5"] { grid-row: 5; }
+.string-label[data-row="6"] { grid-row: 6; }
+
+/* Diapasón (ocupa todas las filas) */
+.fretboard-wrapper {
     grid-column: 2;
     grid-row: 1 / 7;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .fretboard {
     position: relative;
     width: 100%;
-    height: 348px;
+    height: 348px; /* 6 × 58px */
     background: linear-gradient(to bottom, #8B4513 0%, #654321 100%);
     border: 4px solid #333;
     border-right: 8px solid #2a1a0a;
@@ -278,6 +279,7 @@ header p {
     box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
 }
 
+/* Números romanos */
 .fret-numbers {
     position: relative;
     height: 35px;
@@ -302,29 +304,20 @@ header p {
     transform: translateX(-100%);
 }
 
-.guitar-head {
+/* Cabeza de la guitarra (fondo marrón) */
+.head-background {
     grid-column: 3;
     grid-row: 1 / 7;
-    display: grid;
-    grid-template-rows: repeat(6, 58px);
-    align-items: center;
-}
-
-.head-shape {
-    grid-row: 1 / 7;
-    width: 40px;
     background: linear-gradient(to left, #654321, #8B4513);
     border-radius: 0 20px 20px 0;
     border: 3px solid #4a2f1a;
     border-left: none;
-    display: grid;
-    grid-template-rows: repeat(6, 58px);
-    align-items: center;
-    padding: 0 5px;
     box-shadow: 3px 0 8px rgba(0, 0, 0, 0.4);
 }
 
+/* Clavijas */
 .tuning-peg {
+    grid-column: 3;
     width: 20px;
     height: 20px;
     background: radial-gradient(circle, #C0C0C0 30%, #808080 100%);
@@ -332,7 +325,15 @@ header p {
     border-radius: 50%;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     justify-self: start;
+    margin-left: 5px;
 }
+
+.tuning-peg[data-row="1"] { grid-row: 1; }
+.tuning-peg[data-row="2"] { grid-row: 2; }
+.tuning-peg[data-row="3"] { grid-row: 3; }
+.tuning-peg[data-row="4"] { grid-row: 4; }
+.tuning-peg[data-row="5"] { grid-row: 5; }
+.tuning-peg[data-row="6"] { grid-row: 6; }
 
 .instructions {
     text-align: center;
@@ -342,20 +343,14 @@ header p {
     font-size: 1.1rem;
 }
 
+/* Responsive */
 @media (max-width: 600px) {
-    .diagram-outer {
+    .diagram-grid {
         grid-template-columns: 65px 1fr 30px;
         grid-template-rows: repeat(6, 50px);
     }
     
-    .string-labels, .guitar-head, .head-shape {
-        grid-template-rows: repeat(6, 50px);
-    }
-    
-    .string-labels span {
-        font-size: 0.8rem;
-        height: 50px;
-    }
+    .string-label { font-size: 0.8rem; }
     
     .fretboard {
         height: 300px;
