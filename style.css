@@ -155,7 +155,7 @@ header p {
     margin-bottom: 10px;
 }
 
-/* ===== DIAGRAMA DE GUITARRA CON GRID UNIFICADO ===== */
+/* ===== DIAGRAMA DE GUITARRA: GRID POR FILAS ===== */
 .guitar-diagram {
     background: rgba(255, 255, 255, 0.1);
     padding: 30px;
@@ -166,13 +166,12 @@ header p {
 .diagram-grid {
     display: grid;
     grid-template-columns: 80px 1fr 40px;
-    grid-template-rows: repeat(6, 58px);
+    grid-template-rows: repeat(6, 58px) 35px; /* 6 filas de cuerdas + 1 fila de números */
     align-items: center;
-    position: relative;
 }
 
-/* Etiquetas de cuerdas */
-.string-label {
+/* Celdas de etiquetas (columna 1) */
+.label-cell {
     grid-column: 1;
     font-weight: bold;
     font-size: 0.95rem;
@@ -182,61 +181,138 @@ header p {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    height: 58px;
 }
 
-.string-label[data-row="1"] { grid-row: 1; }
-.string-label[data-row="2"] { grid-row: 2; }
-.string-label[data-row="3"] { grid-row: 3; }
-.string-label[data-row="4"] { grid-row: 4; }
-.string-label[data-row="5"] { grid-row: 5; }
-.string-label[data-row="6"] { grid-row: 6; }
-
-/* Diapasón (ocupa todas las filas) */
-.fretboard-wrapper {
+/* Celdas del diapasón (columna 2) - cada una es una franja de 58px */
+.fretboard-cell {
     grid-column: 2;
-    grid-row: 1 / 7;
-    display: flex;
-    flex-direction: column;
     position: relative;
+    height: 58px;
+    border-left: 2px solid #333;
+    border-right: 2px solid #333;
+    background: linear-gradient(to bottom, #8B4513, #654321);
 }
 
-.fretboard {
-    position: relative;
-    width: 100%;
-    height: 348px; /* 6 × 58px */
-    background: linear-gradient(to bottom, #8B4513 0%, #654321 100%);
-    border: 4px solid #333;
-    border-right: 8px solid #2a1a0a;
-    border-radius: 8px 0 0 8px;
-    overflow: visible;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+/* La primera celda del diapasón tiene borde superior redondeado */
+#fretboard-cell-1 {
+    border-top: 4px solid #333;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 0;
 }
 
-.fret {
+/* La última celda del diapasón tiene borde inferior redondeado */
+#fretboard-cell-6 {
+    border-bottom: 4px solid #333;
+    border-bottom-left-radius: 8px;
+}
+
+/* La cejuela (borde derecho grueso) en todas las celdas */
+.fretboard-cell::after {
+    content: '';
     position: absolute;
+    right: 0;
     top: 0;
     bottom: 0;
-    width: 4px;
-    background: linear-gradient(to bottom, #E8E8E8, #A0A0A0, #E8E8E8);
-    box-shadow: 2px 0 3px rgba(0, 0, 0, 0.4);
-    z-index: 2;
+    width: 8px;
+    background: #2a1a0a;
 }
 
-.string {
+/* Celdas de la cabeza (columna 3) */
+.head-cell {
+    grid-column: 3;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 5px;
+    position: relative;
+}
+
+/* Fondo de la cabeza (solo visible en las celdas) */
+.head-cell::before {
+    content: '';
     position: absolute;
     left: 0;
     right: 0;
-    height: 3px;
-    background: linear-gradient(to right, #555, #333, #555);
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(to left, #654321, #8B4513);
+    border-right: 3px solid #4a2f1a;
+    z-index: 0;
+}
+
+/* Primera celda de la cabeza: borde superior redondeado */
+.head-cell:first-of-type::before {
+    border-top-right-radius: 20px;
+}
+
+/* Última celda de la cabeza: borde inferior redondeado */
+.head-cell:nth-of-type(6)::before {
+    border-bottom-right-radius: 20px;
+    border-bottom: 3px solid #4a2f1a;
+}
+
+/* Clavijas */
+.tuning-peg {
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #C0C0C0 30%, #808080 100%);
+    border: 2px solid #555;
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    position: relative;
     z-index: 1;
 }
 
-.string:nth-child(1),
-.string:nth-child(2) {
+/* Fila de números romanos */
+.spacer-cell {
+    grid-column: 1;
+}
+
+.fret-numbers-cell {
+    grid-column: 2;
+    position: relative;
+    height: 35px;
+}
+
+.fret-number {
+    position: absolute;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #C0C0C0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.fret-number[style*="left: 0%"] { left: 0; transform: translateY(-50%) translateX(0); }
+.fret-number[style*="left: 25%"] { left: 25%; transform: translateY(-50%) translateX(-50%); }
+.fret-number[style*="left: 50%"] { left: 50%; transform: translateY(-50%) translateX(-50%); }
+.fret-number[style*="left: 75%"] { left: 75%; transform: translateY(-50%) translateX(-50%); }
+.fret-number.open { 
+    color: #e94560; 
+    font-size: 1rem; 
+    left: 100%;
+    transform: translateY(-50%) translateX(-100%);
+}
+
+/* Líneas de cuerdas dentro de cada celda */
+.string-line {
+    position: absolute;
+    left: 0;
+    right: 8px; /* Deja espacio para la cejuela */
+    top: 50%;
+    height: 3px;
+    background: linear-gradient(to right, #555, #333, #555);
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.string-line.thick {
     height: 4px;
 }
 
+/* Puntos interactivos */
 .fret-point {
     position: absolute;
     width: 38px;
@@ -253,11 +329,13 @@ header p {
     font-size: 0.9rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .fret-point:hover {
     background: rgba(255, 255, 255, 0.4);
-    transform: scale(1.1);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .fret-point.active {
@@ -279,61 +357,16 @@ header p {
     box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
 }
 
-/* Números romanos */
-.fret-numbers {
-    position: relative;
-    height: 35px;
-    margin-top: 10px;
-    width: 100%;
-}
-
-.fret-number {
+/* Barras de trastes (líneas verticales) */
+.fret-bar {
     position: absolute;
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #C0C0C0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, #E8E8E8, #A0A0A0, #E8E8E8);
+    box-shadow: 2px 0 3px rgba(0, 0, 0, 0.4);
+    z-index: 2;
 }
-
-.fret-number[style*="left: 0%"] { transform: translateX(0); }
-.fret-number[style*="left: 25%"],
-.fret-number[style*="left: 50%"],
-.fret-number[style*="left: 75%"] { transform: translateX(-50%); }
-.fret-number.open { 
-    color: #e94560; 
-    font-size: 1rem; 
-    transform: translateX(-100%);
-}
-
-/* Cabeza de la guitarra (fondo marrón) */
-.head-background {
-    grid-column: 3;
-    grid-row: 1 / 7;
-    background: linear-gradient(to left, #654321, #8B4513);
-    border-radius: 0 20px 20px 0;
-    border: 3px solid #4a2f1a;
-    border-left: none;
-    box-shadow: 3px 0 8px rgba(0, 0, 0, 0.4);
-}
-
-/* Clavijas */
-.tuning-peg {
-    grid-column: 3;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, #C0C0C0 30%, #808080 100%);
-    border: 2px solid #555;
-    border-radius: 50%;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    justify-self: start;
-    margin-left: 5px;
-}
-
-.tuning-peg[data-row="1"] { grid-row: 1; }
-.tuning-peg[data-row="2"] { grid-row: 2; }
-.tuning-peg[data-row="3"] { grid-row: 3; }
-.tuning-peg[data-row="4"] { grid-row: 4; }
-.tuning-peg[data-row="5"] { grid-row: 5; }
-.tuning-peg[data-row="6"] { grid-row: 6; }
 
 .instructions {
     text-align: center;
@@ -347,15 +380,12 @@ header p {
 @media (max-width: 600px) {
     .diagram-grid {
         grid-template-columns: 65px 1fr 30px;
-        grid-template-rows: repeat(6, 50px);
+        grid-template-rows: repeat(6, 50px) 35px;
     }
     
-    .string-label { font-size: 0.8rem; }
-    
-    .fretboard {
-        height: 300px;
-    }
-    
+    .label-cell { font-size: 0.8rem; height: 50px; }
+    .fretboard-cell { height: 50px; }
+    .head-cell { height: 50px; }
     .fret-point { width: 32px; height: 32px; font-size: 0.8rem; }
     .tuning-peg { width: 16px; height: 16px; }
     header h1 { font-size: 1.8rem; }
