@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Entrenamiento de Guitarra - Notas y Acordes</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css?v=1">
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎸 Entrenamiento de Guitarra</h1>
+            <p>Practica notas sueltas y acordes en primera posición</p>
+        </header>
+
+        <!-- FORMULARIO DE REGISTRO AL INICIO -->
+        <div class="student-info">
+            <h3>📋 Registro de datos (obligatorio)</h3>
+            <p style="margin-bottom: 10px; opacity: 0.8;">Llena estos campos antes de comenzar para que tus resultados queden registrados.</p>
+            <input type="email" id="studentEmail" placeholder="Correo institucional" required>
+            <input type="text" id="studentName" placeholder="Nombre completo" required>
+            <input type="text" id="studentGroup" placeholder="Grupo" required>
+        </div>
+
+        <!-- SELECTOR DE MODO -->
+        <div class="mode-selector">
+            <button id="btnModeNotes" class="btn btn-mode active"> Notas Sueltas</button>
+            <button id="btnModeChords" class="btn btn-mode">🎸 Acordes</button>
+        </div>
+
+        <div class="game-area">
+            <div class="controls">
+                <button id="btnPlay" class="btn btn-primary">▶️ Escuchar</button>
+                <button id="btnGenerate" class="btn btn-secondary">🎲 Nuevo Ejercicio</button>
+                <button id="btnCheck" class="btn btn-success">✓ Verificar</button>
+                <button id="btnClear" class="btn btn-warning">🔄 Limpiar</button>
+            </div>
+
+            <div class="info-panel">
+                <div class="exercise-info">
+                    <strong>Ejercicio:</strong> <span id="exerciseType">-</span>
+                </div>
+                <div class="position-info">
+                    <strong>Posición:</strong> <span id="positionInfo">-</span>
+                </div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="score-display" id="scoreDisplay" style="display: none;">
+                <h2>Calificación: <span id="scoreValue">0</span>/100</h2>
+                <p id="feedbackText"></p>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA DE GUITARRA -->
+        <div class="guitar-diagram" id="guitarDiagram">
+            <div class="string-labels">
+                <span>6ª (Mi)</span>
+                <span>5ª (La)</span>
+                <span>4ª (Re)</span>
+                <span>3ª (Sol)</span>
+                <span>2ª (Si)</span>
+                <span>1ª (Mi)</span>
+            </div>
+            <div class="fretboard" id="fretboard"></div>
+            <div class="fret-numbers">
+                <span>0</span>
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <p id="instructionText">Haz clic en los puntos para colocar los dedos</p>
+        </div>
+    </div>
+
+    <script src="app.js?v=1"></script>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log('Service Worker no registrado (no es crítico):', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

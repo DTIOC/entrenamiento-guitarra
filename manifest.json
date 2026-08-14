@@ -1,0 +1,10 @@
+{
+  "name": "Entrenamiento de Guitarra IEMS",
+  "short_name": "GuitarApp",
+  "description": "App para practicar notas y acordes de guitarra en primera posición",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": []
+}
