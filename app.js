@@ -71,6 +71,7 @@ class GuitarTrainingApp {
         const stringSpacing = totalHeight / 6;
         const pointSize = 38;
         
+        // Dibujar trastes
         for (let i = 1; i <= 4; i++) {
             const fret = document.createElement('div');
             fret.className = 'fret';
@@ -78,6 +79,7 @@ class GuitarTrainingApp {
             this.fretboard.appendChild(fret);
         }
         
+        // Dibujar cuerdas y puntos
         for (let string = 6; string >= 1; string--) {
             const stringIndex = 6 - string;
             const stringCenter = (stringIndex * stringSpacing) + (stringSpacing / 2);
@@ -230,7 +232,7 @@ class GuitarTrainingApp {
         const group = document.getElementById('studentGroup').value.trim();
         
         if (!email || !name || !group) {
-            alert('⚠️ Por favor, completa todos los campos de registro antes de verificar.');
+            alert('️ Por favor, completa todos los campos de registro antes de verificar.');
             document.getElementById('studentEmail').focus();
             return;
         }
@@ -273,7 +275,7 @@ class GuitarTrainingApp {
         scoreDisplay.style.display = 'block';
         document.getElementById('scoreValue').textContent = score.percentage;
         
-        let text = '📚 Sigue practicando, ¡tú puedes!';
+        let text = ' Sigue practicando, ¡tú puedes!';
         if (score.percentage === 100) text = '🌟 ¡Perfecto! ¡Excelente posición!';
         else if (score.percentage >= 80) text = '👏 ¡Muy bien! Casi perfecto';
         else if (score.percentage >= 60) text = ' Bien, sigue practicando';
