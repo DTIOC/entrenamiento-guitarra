@@ -7,13 +7,13 @@
     <title>Entrenamiento de Guitarra - Notas y Acordes</title>
     
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=9">
+    <link rel="stylesheet" href="style.css?v=10">
     <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.min.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎸 Entrenamiento de Guitarra</h1>
+            <h1> Entrenamiento de Guitarra</h1>
             <p>Practica notas sueltas y acordes en primera posición</p>
         </header>
 
@@ -26,14 +26,14 @@
         </div>
 
         <div class="mode-selector">
-            <button id="btnModeNotes" class="btn btn-mode active"> Notas Sueltas</button>
+            <button id="btnModeNotes" class="btn btn-mode active">🎵 Notas Sueltas</button>
             <button id="btnModeChords" class="btn btn-mode">🎸 Acordes</button>
         </div>
 
         <div class="game-area">
             <div class="controls">
                 <button id="btnPlay" class="btn btn-primary">▶️ Escuchar</button>
-                <button id="btnGenerate" class="btn btn-secondary">🎲 Nuevo Ejercicio</button>
+                <button id="btnGenerate" class="btn btn-secondary"> Nuevo Ejercicio</button>
                 <button id="btnCheck" class="btn btn-success">✓ Verificar</button>
                 <button id="btnClear" class="btn btn-warning">🔄 Limpiar</button>
             </div>
@@ -55,10 +55,8 @@
             </div>
         </div>
 
-        <!-- DIAGRAMA DE GUITARRA: CABEZAL A LA DERECHA, 6ª CUERDA ARRIBA -->
         <div class="guitar-diagram">
             <div class="diagram-outer">
-                <!-- Etiquetas de cuerdas (a la izquierda) -->
                 <div class="string-labels">
                     <span>6ª (Mi)</span>
                     <span>5ª (La)</span>
@@ -68,10 +66,8 @@
                     <span>1ª (Mi)</span>
                 </div>
                 
-                <!-- Diapasón -->
                 <div class="fretboard-container">
                     <div class="fretboard" id="fretboard"></div>
-                    <!-- Números romanos alineados con cada traste (de izquierda a derecha: IV a 0) -->
                     <div class="fret-numbers">
                         <span class="fret-number" style="left: 0%;">IV</span>
                         <span class="fret-number" style="left: 25%;">III</span>
@@ -81,7 +77,6 @@
                     </div>
                 </div>
 
-                <!-- Cabeza de la guitarra (a la DERECHA) -->
                 <div class="guitar-head">
                     <div class="head-shape">
                         <div class="tuning-peg"></div>
@@ -100,7 +95,7 @@
         </div>
     </div>
 
-    <script src="app.js?v=9"></script>
+    <script src="app.js?v=10"></script>
     
     <script>
         if ('serviceWorker' in navigator) {
