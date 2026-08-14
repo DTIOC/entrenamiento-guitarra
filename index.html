@@ -7,7 +7,7 @@
     <title>Entrenamiento de Guitarra - Notas y Acordes</title>
     
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=4">
     <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.min.js"></script>
 </head>
 <body>
@@ -17,18 +17,16 @@
             <p>Practica notas sueltas y acordes en primera posición</p>
         </header>
 
-        <!-- FORMULARIO DE REGISTRO AL INICIO -->
         <div class="student-info">
             <h3>📋 Registro de datos (obligatorio)</h3>
-            <p style="margin-bottom: 10px; opacity: 0.8;">Llena estos campos antes de comenzar para que tus resultados queden registrados.</p>
+            <p style="margin-bottom: 10px; opacity: 0.8;">Llena estos campos antes de comenzar.</p>
             <input type="email" id="studentEmail" placeholder="Correo institucional" required>
             <input type="text" id="studentName" placeholder="Nombre completo" required>
             <input type="text" id="studentGroup" placeholder="Grupo" required>
         </div>
 
-        <!-- SELECTOR DE MODO -->
         <div class="mode-selector">
-            <button id="btnModeNotes" class="btn btn-mode active"> Notas Sueltas</button>
+            <button id="btnModeNotes" class="btn btn-mode active">🎵 Notas Sueltas</button>
             <button id="btnModeChords" class="btn btn-mode">🎸 Acordes</button>
         </div>
 
@@ -57,35 +55,48 @@
             </div>
         </div>
 
-        <!-- DIAGRAMA DE GUITARRA -->
-<div class="guitar-diagram" id="guitarDiagram">
-    <div class="diagram-container">
-        <div class="string-labels-left">
-            <span>6ª (Mi)</span>
-            <span>5ª (La)</span>
-            <span>4ª (Re)</span>
-            <span>3ª (Sol)</span>
-            <span>2ª (Si)</span>
-            <span>1ª (Mi)</span>
-        </div>
-        <div class="fretboard-wrapper">
-            <div class="fretboard" id="fretboard"></div>
-            <div class="fret-numbers">
-                <span>0</span>
-                <span>1</span>
-                <span>2</span>
-                <span>3</span>
+        <!-- DIAGRAMA DE GUITARRA CON CABEZA Y ETIQUETAS LATERALES -->
+        <div class="guitar-diagram">
+            <div class="diagram-outer">
+                <!-- Cabeza de la guitarra (lado izquierdo) -->
+                <div class="guitar-head">
+                    <div class="head-curve"></div>
+                    <div class="head-curve"></div>
+                    <div class="head-curve"></div>
+                    <div class="head-curve"></div>
+                    <div class="head-curve"></div>
+                    <div class="head-curve"></div>
+                </div>
+                
+                <!-- Etiquetas de cuerdas -->
+                <div class="string-labels">
+                    <span>6ª (Mi)</span>
+                    <span>5ª (La)</span>
+                    <span>4ª (Re)</span>
+                    <span>3ª (Sol)</span>
+                    <span>2ª (Si)</span>
+                    <span>1ª (Mi)</span>
+                </div>
+                
+                <!-- Diapasón -->
+                <div class="fretboard-container">
+                    <div class="fretboard" id="fretboard"></div>
+                    <div class="fret-numbers">
+                        <span>0 (al aire)</span>
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
         <div class="instructions">
             <p id="instructionText">Haz clic en los puntos para colocar los dedos</p>
         </div>
     </div>
 
-    <script src="app.js?v=2"></script>
+    <script src="app.js?v=4"></script>
     
     <script>
         if ('serviceWorker' in navigator) {
