@@ -1,6 +1,7 @@
 class GuitarTrainingApp {
     constructor() {
         this.synth = null;
+        this.isAudioReady = false; // <-- NUEVO: Bandera para saber si el audio cargó
         this.currentMode = 'notes';
         this.currentExercise = null;
         this.userPositions = [];
@@ -50,16 +51,35 @@ class GuitarTrainingApp {
     async initAudio() {
         if (!this.synth) {
             await Tone.start();
-            this.synth = new Tone.PolySynth(Tone.Synth, {
-                oscillator: { type: "sawtooth", harmonicity: 1.2 },
-                envelope: { attack: 0.01, decay: 0.4, sustain: 0.3, release: 1.5 },
-                volume: -5
+            
+            this.synth = new Tone.Sampler({
+                urls: {
+                    "E2": "E2.wav", "F2": "F2.wav", "F#2": "F#2.wav", "G2": "G2.wav", "G#2": "G#2.wav",
+                    "A2": "A2.wav", "A#2": "A#2.wav", "B2": "B2.wav",
+                    "C3": "C3.wav", "C#3": "C#3.wav", "D3": "D3.wav", "D#3": "D#3.wav", "E3": "E3.wav",
+                    "F3": "F3.wav", "F#3": "F#3.wav", "G3": "G3.wav", "G#3": "G#3.wav",
+                    "A3": "A3.wav", "A#3": "A#3.wav", "B3": "B3.wav",
+                    "C4": "C4.wav", "C#4": "C#4.wav", "D4": "D4.wav", "D#4": "D#4.wav", "E4": "E4.wav",
+                    "F4": "F4.wav", "F#4": "F#4.wav", "G4": "G4.wav", "G#4": "G#4.wav"
+                },
+                baseUrl: "./samples/guitar/",
+                onload: () => {
+                    console.log("✅ Guitarra clásica real cargada correctamente");
+                    this.isAudioReady = true;
+                },
+                onerror: (error) => {
+                    console.error("❌ Error cargando guitarra:", error);
+                }
             }).toDestination();
             
-            const filter = new Tone.Filter(3000, "lowpass").toDestination();
-            const reverb = new Tone.Reverb({ decay: 2.5, wet: 0.25 }).toDestination();
-            this.synth.connect(filter);
-            filter.connect(reverb);
+            // Un poco de reverberación para simular el cuerpo de la guitarra
+            const reverb = new Tone.Reverb({ decay: 1.5, wet: 0.2 }).toDestination();
+            this.synth.connect(reverb);
+        }
+        
+        // Si el audio aún no está listo, esperamos un momento
+        if (!this.isAudioReady) {
+            return new Promise(resolve => setTimeout(resolve, 100));
         }
     }
     
@@ -111,7 +131,6 @@ class GuitarTrainingApp {
         document.getElementById('btnGenerate').addEventListener('click', () => this.generateNewExercise());
         document.getElementById('btnCheck').addEventListener('click', () => this.checkExercise());
         document.getElementById('btnClear').addEventListener('click', () => this.clearPositions());
-        // NUEVO: Event listener para el botón de tocar el acorde del usuario
         document.getElementById('btnPlayUser').addEventListener('click', () => this.playUserChord());
     }
     
@@ -161,8 +180,8 @@ class GuitarTrainingApp {
         document.getElementById('scoreDisplay').style.display = 'none';
     }
     
-    handleFretClick(string, fret, pointElement) {
-        this.initAudio();
+    async handleFretClick(string, fret, pointElement) { // <-- CAMBIO: Agregado 'async'
+        await this.initAudio(); // <-- CAMBIO: Agregado 'await'
         
         if (pointElement.classList.contains('active')) {
             pointElement.classList.remove('active');
@@ -204,7 +223,7 @@ class GuitarTrainingApp {
                 feedback.style.color = '#fff';
             }, 1000);
         } else {
-                        const positions = this.currentExercise.positions;
+            const positions = this.currentExercise.positions;
             const notesToPlay = [];
             for (let string = 6; string >= 1; string--) {
                 const fret = positions[string];
@@ -221,9 +240,14 @@ class GuitarTrainingApp {
         }
     }
 
-    // NUEVA FUNCIÓN: Tocar el acorde que el usuario acaba de formar
     async playUserChord() {
         await this.initAudio();
+        
+        // <-- CAMBIO: Verificación de seguridad para evitar errores de carga
+        if (!this.isAudioReady) {
+            console.log("Esperando a que la guitarra cargue...");
+            return;
+        }
         
         if (this.userPositions.length === 0) {
             document.getElementById('feedback').textContent = '⚠️ Primero coloca los dedos en el diagrama para escuchar tu acorde';
@@ -234,7 +258,6 @@ class GuitarTrainingApp {
         feedback.textContent = '🎵 Escuchando tu acorde...';
         feedback.style.color = '#00d9a5';
 
-        // Ordenar las notas de la 6ª cuerda a la 1ª para simular un rasgueo natural
         const sortedPositions = [...this.userPositions].sort((a, b) => b.string - a.string);
         const notesToPlay = [];
 
@@ -243,7 +266,6 @@ class GuitarTrainingApp {
             if (noteName) notesToPlay.push(noteName);
         });
 
-        // Tocar con un ligero efecto de rasgueo (60ms entre cada nota)
         notesToPlay.forEach((note, index) => {
             setTimeout(() => this.playNote(note), index * 60);
         });
@@ -271,7 +293,7 @@ class GuitarTrainingApp {
             return;
         }
         if (this.userPositions.length === 0) {
-            document.getElementById('feedback').textContent = '️ Primero coloca los dedos en el diagrama';
+            document.getElementById('feedback').textContent = '⚠️ Primero coloca los dedos en el diagrama';
             return;
         }
         
@@ -311,7 +333,7 @@ class GuitarTrainingApp {
         
         let text = '📚 Sigue practicando, ¡tú puedes!';
         if (score.percentage === 100) text = '🌟 ¡Perfecto! ¡Excelente posición!';
-        else if (score.percentage >= 80) text = ' ¡Muy bien! Casi perfecto';
+        else if (score.percentage >= 80) text = '👏 ¡Muy bien! Casi perfecto';
         else if (score.percentage >= 60) text = '👍 Bien, sigue practicando';
         else if (score.percentage >= 40) text = '💪 Vas por buen camino, continúa';
         document.getElementById('feedbackText').textContent = text;
