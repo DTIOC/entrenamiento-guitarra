@@ -5,7 +5,7 @@ class GuitarTrainingApp {
         this.currentMode = 'notes';
         this.currentExercise = null;
         this.userPositions = [];
-        this.webhookURL = 'https://script.google.com/macros/s/AKfycbzT147akp2Q75EeL6IbS_QHHXcJPxJ71Ro4lInEJwGa85-QkkTU8_qSb0gxvrtKK7tj/exec';
+        this.webhookURL = 'https://script.google.com/macros/s/AKfycbz_M1B6eXeAaLUJngkgFbI2_lMq65NM338XJx6L0Il-I6816zdRiV_9VFRW2tflLETs/exec';
         
         this.noteDatabase = {
             6: ['Mi2', 'Fa2', 'Fa#2', 'Sol2', 'Sol#2'],
